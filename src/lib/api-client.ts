@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "/api/v1",
+  baseURL: "https://whatsappai-backend-3ji4.onrender.com/v1",
   headers: {
     "Content-Type": "application/json",
   },
