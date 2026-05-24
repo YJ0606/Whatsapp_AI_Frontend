@@ -1,11 +1,13 @@
 import axios from "axios";
 
-export const apiClient = axios.create({
-  baseURL: "https://whatsapp-ai-frontend-eight.vercel.app/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const apiClient = axios.create({
+  baseURL: `${API_URL}/v1`,
+  withCredentials: true,
 });
+
+export default apiClient;
 
 // Request interceptor – attach auth token
 apiClient.interceptors.request.use((config) => {
