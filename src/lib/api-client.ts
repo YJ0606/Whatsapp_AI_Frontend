@@ -2,14 +2,16 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// ✅ Create axios instance
 const apiClient = axios.create({
   baseURL: `${API_URL}/v1`,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-export default apiClient;
-
-// Request interceptor – attach auth token
+// ✅ Request interceptor – attach auth token
 apiClient.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("waai_access_token");
@@ -20,16 +22,19 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor – handle 401
+// ✅ Response interceptor – handle 401
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("waai_access_token");
-      window.location.href = "/login";
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("waai_access_token");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
 );
 
+// ✅ ONLY ONE export (IMPORTANT)
 export default apiClient;
